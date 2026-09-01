@@ -227,6 +227,43 @@ body:after{width:280px;height:280px;right:-130px;bottom:80px;background:#fff0f6}
   .url{font-size:15px}
   .arrow{font-size:31px}
 }
+
+.music-player{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:20;
+}
+
+.music-player button{
+  width:54px;
+  height:54px;
+  border:3px solid #fff;
+  border-radius:50%;
+  background:linear-gradient(145deg,#ff79a8,#ffb1ca);
+  color:white;
+  font-size:24px;
+  cursor:pointer;
+  box-shadow:0 7px 20px rgba(206,88,132,.22);
+}
+
+.music-player button.playing{
+  animation:musicSpin 3s linear infinite;
+}
+
+@keyframes musicSpin{
+  to{transform:rotate(360deg)}
+}
+
+#youtubePlayer{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+  border:0;
+}
+  
 </style>
 </head>
 <body>
@@ -286,8 +323,40 @@ body:after{width:280px;height:280px;right:-130px;bottom:80px;background:#fff0f6}
   <button class="share" onclick="sharePage()"><span>⌯</span> Chia sẻ trang này</button>
   <div class="footer">made with ♡ for a good day</div>
 </main>
+  
+<div class="music-player">
+  <button id="musicBtn" onclick="toggleMusic()">🎵</button>
 
+  <iframe
+    id="youtubePlayer"
+    src="https://www.youtube.com/embed/dVoXdhU1n6A?enablejsapi=1"
+    allow="autoplay"
+    title="Music">
+  </iframe>
+</div>
+  
 <script>
+  let player;
+let isPlaying = false;
+
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('youtubePlayer');
+}
+
+function toggleMusic() {
+  if (!player) return;
+
+  if (isPlaying) {
+    player.pauseVideo();
+    isPlaying = false;
+    document.getElementById('musicBtn').classList.remove('playing');
+  } else {
+    player.playVideo();
+    isPlaying = true;
+    document.getElementById('musicBtn').classList.add('playing');
+  }
+}
+  
 async function sharePage() {
   const data = {
     title: 'Phương Thanh ♡',
@@ -304,5 +373,8 @@ async function sharePage() {
   } catch (e) {}
 }
 </script>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  
 </body>
 </html>
